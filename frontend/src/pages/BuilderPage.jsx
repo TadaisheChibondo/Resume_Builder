@@ -8,6 +8,7 @@ import {
   Loader,
   RefreshCw,
   Trash2,
+  Home,
 } from "lucide-react";
 import EducationStep from "../components/form-steps/EducationStep";
 import ExperienceStep from "../components/form-steps/ExperienceStep";
@@ -17,7 +18,7 @@ import TemplateStep from "../components/form-steps/TemplateStep";
 import SkillsStep from "../components/form-steps/SkillsStep";
 import TemplateVisualizer from "../components/ui/TemplateVisualizer";
 
-const BuilderPage = () => {
+const BuilderPage = ({ onExit }) => {
   // Define the default empty state
   const defaultFormData = {
     template_choice: "classic",
@@ -167,6 +168,13 @@ const BuilderPage = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row">
       {/* Left Column: Form Inputs Panel */}
       <div className="w-full md:w-1/2 p-6 md:p-12 overflow-y-auto max-h-screen border-r border-slate-200 bg-white">
+        {/* NEW: Back to Home Button */}
+        <button
+          onClick={onExit}
+          className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-8 font-medium"
+        >
+          <Home size={16} /> Back to Home
+        </button>
         {/* Progress Tracker */}
         <div className="mb-8">
           <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-slate-400">

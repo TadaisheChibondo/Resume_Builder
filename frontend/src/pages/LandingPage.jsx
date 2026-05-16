@@ -598,14 +598,14 @@ export default function LandingPage({ onGetStarted }) {
     {
       icon: "⚡",
       accent: mk.yellow,
-      title: "Built for NUST Students",
+      title: "Built for Zimbabwean Students",
       body: "Zero formal experience? Add coursework projects, freelance gigs, and hackathons. The AI frames them as professional, quantified achievements.",
     },
     {
       icon: "📱",
       accent: mk.orange,
-      title: "EcoCash Unlock — $2.00",
-      body: "Preview your full resume free. Pay $2 via EcoCash USSD push to strip the watermark and download your clean, recruiter-ready PDF.",
+      title: "EcoCash Unlock — $1.00",
+      body: "Preview your full resume free. Pay $1 via EcoCash USSD push to strip the watermark and download your clean, recruiter-ready PDF.",
     },
     {
       icon: "🛡️",
@@ -627,7 +627,7 @@ export default function LandingPage({ onGetStarted }) {
     "Add Experience",
     "List Projects",
     "Pick a Template",
-    "Pay $2 EcoCash",
+    "Pay $1 EcoCash",
     "Download PDF 🎉",
   ];
 
@@ -688,7 +688,7 @@ export default function LandingPage({ onGetStarted }) {
               color: mk.green,
             }}
           >
-            resume<span style={{ color: mk.yellow }}>.engine</span>
+            build<span style={{ color: mk.yellow }}>.myCV</span>
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "22px" }}>
@@ -721,7 +721,7 @@ export default function LandingPage({ onGetStarted }) {
               cursor: "pointer",
             }}
           >
-            Build My Resume →
+            Build My CV →
           </button>
         </div>
       </nav>
@@ -800,7 +800,7 @@ export default function LandingPage({ onGetStarted }) {
                 fontFamily: "'JetBrains Mono', monospace",
               }}
             >
-              Built for ZW CS Students · 2026
+              Built for ZW Uni Students · 2026
             </span>
           </div>
 
@@ -847,7 +847,7 @@ export default function LandingPage({ onGetStarted }) {
           >
             Paste your casual project description. The AI turns it into
             ATS-grade bullets. Pick a premium template. Pay{" "}
-            <strong style={{ color: mk.orange }}>$2 via EcoCash</strong> and
+            <strong style={{ color: mk.orange }}>$1 via EcoCash</strong> and
             download your watermark-free PDF — ready for attachment season.
           </p>
 
@@ -901,7 +901,7 @@ export default function LandingPage({ onGetStarted }) {
             {[
               ["4", mk.purple, "Templates"],
               ["AI", mk.green, "Bullet Writer"],
-              ["$2", mk.orange, "EcoCash Unlock"],
+              ["$1", mk.orange, "EcoCash Unlock"],
               ["A4", mk.cyan, "PDF Export"],
             ].map(([v, c, l]) => (
               <div key={l}>
@@ -1268,7 +1268,7 @@ export default function LandingPage({ onGetStarted }) {
                   fontFamily: "'JetBrains Mono', monospace",
                 }}
               >
-                $2.00
+                $1.00
               </span>
               .
             </h2>
@@ -1379,10 +1379,10 @@ export default function LandingPage({ onGetStarted }) {
         >
           <span style={{ color: mk.green }}>resume</span>
           <span style={{ color: mk.yellow }}>.engine</span>
-          <span> — made for NUST students 🇿🇼</span>
+          <span> — made for Zimbabwean students 🇿🇼</span>
         </span>
         <span style={{ color: mk.comment, fontSize: "12px" }}>
-          Django · React · WeasyPrint · Paynow Zimbabwe
+          Django · React · WeasyPrint · Paynow Zimbabwe | By Tadaishe Chibondo
         </span>
       </footer>
     </div>

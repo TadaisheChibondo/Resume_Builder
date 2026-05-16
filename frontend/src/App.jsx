@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="App">
       {showBuilder ? (
-        <BuilderPage />
+        <BuilderPage onExit={() => setShowBuilder(false)} />
       ) : (
         <LandingPage onGetStarted={handleStartBuilding} />
       )}

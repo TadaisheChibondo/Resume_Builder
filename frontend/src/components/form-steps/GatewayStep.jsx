@@ -47,7 +47,7 @@ const GatewayStep = ({ resumeId }) => {
           Unlock Your ATS Resume
         </h2>
         <p className="text-sm text-slate-500 mt-1">
-          Your draft is saved and your preview is ready. Pay the $2.00 export
+          Your draft is saved and your preview is ready. Pay the $1.00 export
           fee via EcoCash to remove the watermark and download your high-quality
           PDF.
         </p>
@@ -94,7 +94,7 @@ const GatewayStep = ({ resumeId }) => {
               ) : (
                 <>
                   <Lock size={18} />
-                  Pay $2.00 with EcoCash
+                  Pay $1.00 with EcoCash
                 </>
               )}
             </button>

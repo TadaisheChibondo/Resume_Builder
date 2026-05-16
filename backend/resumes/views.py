@@ -93,7 +93,7 @@ def initiate_payment(request, id):
         )
 
         payment = paynow.create_payment(str(resume.id), resume.email)
-        payment.add('Premium ATS Resume Export', 0.30)
+        payment.add('Premium ATS Resume Export', 1.00)
 
         # 4. Fire the EcoCash request
         # 4. Fire the EcoCash request
