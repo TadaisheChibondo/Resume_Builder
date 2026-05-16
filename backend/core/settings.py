@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
-
+import dj_database_url
 # Load environment variables from the .env file in the backend folder
 load_dotenv()
 
@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'default-unsafe-key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.ngrok-free.dev', '.ngrok-free.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend-curious-stream-8744.fly.dev']
 
 
 # Application definition
@@ -87,12 +87,18 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.config(conn_max_age=600)
     }
-}
+else:
+    # Fallback to SQLite for local development
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -135,6 +141,7 @@ STATIC_URL = "static/"
 # This allows your React (Vite) app to communicate with Django
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://resume-builder-hazel-delta.vercel.app",
 ]
 
 # Django REST Framework Settings

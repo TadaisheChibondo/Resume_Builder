@@ -88,8 +88,8 @@ def initiate_payment(request, id):
         paynow = Paynow(
             integration_id, 
             integration_key,
-            'http://localhost:5173/success',
-            'https://unfarming-describable-leighann.ngrok-free.dev/api/resumes/webhook/paynow/'
+            'https://resume-builder-hazel-delta.vercel.app/success', # Return URL (where users land after payment)
+            'https://backend-curious-stream-8744.fly.dev/api/resumes/webhook/'
         )
 
         payment = paynow.create_payment(str(resume.id), resume.email)
