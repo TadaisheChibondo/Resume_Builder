@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap");
+
+      @page {
+        size: A4;
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "DM Sans", "Helvetica", sans-serif;
+        color: #2c2118;
+        font-size: 10pt;
+        line-height: 1.55;
+        position: relative;
+      }
+
+      .watermark {
+        position: fixed;
+        left: 5%;
+        font-size: 75pt;
+        font-weight: 800;
+        letter-spacing: 5px;
+        color: rgba(220, 38, 38, 0.08); /* Faint Red */
+        transform: rotate(-45deg);
+        z-index: 999;
+        white-space: nowrap;
+        pointer-events: none;
+      }
+      .watermark-top {
+        top: 15%;
+      }
+      .watermark-mid {
+        top: 45%;
+        color: rgba(234, 88, 12, 0.07);
+        font-size: 85pt;
+        left: 0%;
+      } /* Faint Orange */
+      .watermark-bot {
+        top: 75%;
+      }
+      /* ── Header Band ────────────────────────────────────── */
+      .header {
+        background: #b85c38;
+        padding: 1.2cm 2cm 1cm 2cm;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        transform: translate(40px, 40px);
+      }
+
+      .header::before {
+        content: "";
+        position: absolute;
+        top: -30px;
+        right: 80px;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .header-name {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 32pt;
+        font-weight: 700;
+        color: #fff;
+        line-height: 1.05;
+        letter-spacing: -0.5px;
+      }
+
+      .header-contact {
+        margin-top: 8px;
+        font-size: 8.5pt;
+        color: rgba(255, 255, 255, 0.82);
+        letter-spacing: 0.3px;
+      }
+
+      .header-contact span {
+        margin-right: 14px;
+      }
+
+      .header-divider {
+        color: rgba(255, 255, 255, 0.35);
+        margin: 0 4px;
+      }
+
+      /* ── Body ───────────────────────────────────────────── */
+      .body {
+        padding: 0.8cm 2cm 2cm 2cm;
+      }
+
+      /* ── Section Headers ────────────────────────────────── */
+      h2 {
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 16pt;
+        font-weight: 600;
+        font-style: italic;
+        color: #b85c38;
+        margin-top: 22px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      h2::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, #b85c3855, transparent);
+      }
+
+      /* ── Summary ────────────────────────────────────────── */
+      .summary-text {
+        font-size: 9.5pt;
+        color: #4a3728;
+        line-height: 1.65;
+        font-style: italic;
+        border-left: 3px solid #b85c38;
+        padding-left: 12px;
+        margin-top: 4px;
+      }
+
+      /* ── Entries ────────────────────────────────────────── */
+      .entry {
+        margin-bottom: 13px;
+        padding-bottom: 13px;
+        border-bottom: 1px solid #e8ddd6;
+      }
+
+      .entry:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .entry-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+      }
+
+      .entry-title {
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        font-size: 10.5pt;
+        color: #2c2118;
+      }
+
+      .entry-sub {
+        font-size: 9pt;
+        color: #7a5c44;
+        margin-top: 1px;
+      }
+
+      .entry-date {
+        font-size: 8.5pt;
+        color: #b85c38;
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-weight: 500;
+      }
+
+      ul {
+        padding-left: 16px;
+        margin-top: 6px;
+      }
+
+      li {
+        font-size: 9.5pt;
+        color: #4a3728;
+        margin-bottom: 4px;
+        line-height: 1.5;
+      }
+
+      li::marker {
+        color: #b85c38;
+        content: "▸  ";
+      }
+
+      .project-stack {
+        font-size: 8.5pt;
+        color: #7a5c44;
+        font-style: italic;
+        font-weight: 400;
+      }
+
+      /* ── Two-column grid for Education ─────────────────── */
+      .edu-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 16px;
+      }
+
+      .edu-grid .entry {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    {% if not resume.is_paid %}
+    <div class="watermark watermark-top">PREVIEW ONLY</div>
+    <div class="watermark watermark-mid">UNPAID DRAFT</div>
+    <div class="watermark watermark-bot">PREVIEW ONLY</div>
+    {% endif %}
+
+    <!-- ── Header ─────────────────────────────────────── -->
+    <div class="header">
+      <div class="header-name">{{ resume.full_name }}</div>
+      <div class="header-contact">
+        <span>{{ resume.email }}</span>
+        <span class="header-divider">·</span>
+        <span>{{ resume.phone }}</span>
+        {% if resume.location %}
+        <span class="contact-pipe">|</span>
+        <span>{{ resume.location }}</span>
+        {% endif %} {% if resume.linkedin_url %}
+        <span class="header-divider">·</span>
+        <span>{{ resume.linkedin_url }}</span>
+        {% endif %} {% if resume.portfolio_url %}
+        <span class="header-divider">·</span>
+        <span>{{ resume.portfolio_url }}</span>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ── Body ───────────────────────────────────────── -->
+    <div class="body">
+      {% if resume.skills.all %}
+      <h2>Core Skills</h2>
+      <p class="summary-text">{% for skill in resume.skills.all %} {{ skill.name }}{% if not forloop.last %}, {% endif %} {% endfor %}</p>
+      {% endif %} {% if resume.professional_summary %}
+      <h2>Profile</h2>
+      <p class="summary-text">{{ resume.professional_summary }}</p>
+      {% endif %} {% if resume.education.all %}
+      <h2>Education</h2>
+      <div class="edu-grid">
+        {% for edu in resume.education.all %}
+        <div class="entry">
+          <div class="entry-header">
+            <div>
+              <div class="entry-title">{{ edu.degree }}</div>
+              <div class="entry-sub">{{ edu.institution }}</div>
+            </div>
+            <div class="entry-date">{{ edu.start_date|date:"Y" }}–{% if edu.end_date %}{{ edu.end_date|date:"Y" }}{% else %}Present{% endif %}</div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %} {% if resume.experience.all %}
+      <h2>Experience</h2>
+      {% for exp in resume.experience.all %}
+      <div class="entry">
+        <div class="entry-header">
+          <div>
+            <div class="entry-title">{{ exp.role }}</div>
+            <div class="entry-sub">{{ exp.company }}</div>
+          </div>
+          <div class="entry-date">{{ exp.start_date|date:"M Y" }} – {% if exp.end_date %}{{ exp.end_date|date:"M Y" }}{% else %}Present{% endif %}</div>
+        </div>
+        <ul>
+          {% if exp.ai_optimized_description %} {% for bullet in exp.ai_optimized_description.splitlines %} {% if bullet %} {% if bullet %}
+          <li>{{ bullet|cut:"- " }}</li>
+          {% endif %} {% endif %} {% endfor %} {% else %}
+          <li>{{ exp.raw_description }}</li>
+          {% endif %}
+        </ul>
+      </div>
+      {% endfor %} {% endif %} {% if resume.projects.all %}
+      <h2>Projects</h2>
+      {% for proj in resume.projects.all %}
+      <div class="entry">
+        <div class="entry-header">
+          <div class="entry-title">
+            {{ proj.name }}
+            <span class="project-stack"> — {{ proj.tech_stack }}</span>
+          </div>
+        </div>
+        <ul>
+          <li>{{ proj.description }}</li>
+        </ul>
+      </div>
+      {% endfor %} {% endif %}
+    </div>
+  </body>
+</html>
