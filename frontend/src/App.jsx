@@ -1,27 +1,30 @@
-import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import LandingPage from "./pages/LandingPage"; // Adjust this path if you saved it somewhere else
 import BuilderPage from "./pages/BuilderPage";
-// SuccessPage and LandingPage can be stubbed out or added as routes later
 
 function App() {
+  // Check if they were already building a CV so we don't force them
+  // to look at the landing page every time they refresh
+  const [showBuilder, setShowBuilder] = useState(() => {
+    return localStorage.getItem("resumeStep") !== null;
+  });
+
+  const handleStartBuilding = () => {
+    setShowBuilder(true);
+    // Give them a fresh start if they click the button, unless they already have data
+    if (!localStorage.getItem("resumeStep")) {
+      localStorage.setItem("resumeStep", "1");
+    }
+  };
+
   return (
-    <Router>
-      <Routes>
-        {/* Landing Page Route - For now, we redirect straight to the builder */}
-        <Route path="/" element={<Navigate to="/builder" replace />} />
-
-        {/* The Main App Workspace */}
-        <Route path="/builder" element={<BuilderPage />} />
-
-        {/* Fallback route to catch 404s and send them back to the workspace */}
-        <Route path="*" element={<Navigate to="/builder" replace />} />
-      </Routes>
-    </Router>
+    <div className="App">
+      {showBuilder ? (
+        <BuilderPage />
+      ) : (
+        <LandingPage onGetStarted={handleStartBuilding} />
+      )}
+    </div>
   );
 }
 
