@@ -1,5 +1,18 @@
 import { useState, useEffect } from "react";
 
+// ─── Mobile breakpoint hook ───────────────────────────────────
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth < breakpoint : false,
+  );
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < breakpoint);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 // ─── Monokai Palette ─────────────────────────────────────────
 const mk = {
   bg: "#272822",
@@ -543,6 +556,7 @@ function StepDot({ num, label, done }) {
 
 // ─── Main component ───────────────────────────────────────────
 export default function LandingPage({ onGetStarted }) {
+  const isMobile = useIsMobile();
   const [activeTemplate, setActiveTemplate] = useState("meridian");
   const [activeStep, setActiveStep] = useState(0);
 
@@ -660,6 +674,11 @@ export default function LandingPage({ onGetStarted }) {
         ::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-track { background:${mk.bgPanel}; }
         ::-webkit-scrollbar-thumb { background:${mk.border}; border-radius:3px; }
         a { text-decoration:none; }
+        /* ── Mobile nav links hidden ── */
+        @media (max-width: 768px) {
+          .nav-links { display: none !important; }
+          .feat-card:hover { transform: none !important; box-shadow: none !important; }
+        }
       `}</style>
 
       {/* NAV */}
@@ -671,7 +690,7 @@ export default function LandingPage({ onGetStarted }) {
           background: `${mk.bgPanel}ee`,
           backdropFilter: "blur(16px)",
           borderBottom: `1px solid ${mk.border}`,
-          padding: "0 max(32px, 5vw)",
+          padding: "0 max(16px, 5vw)",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
@@ -691,7 +710,11 @@ export default function LandingPage({ onGetStarted }) {
             build<span style={{ color: mk.yellow }}>.myCV</span>
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: "22px" }}>
+        {/* Links hidden on mobile via CSS class */}
+        <div
+          className="nav-links"
+          style={{ display: "flex", alignItems: "center", gap: "22px" }}
+        >
           <a href="#features" style={{ color: mk.comment, fontSize: "13.5px" }}>
             Features
           </a>
@@ -707,23 +730,24 @@ export default function LandingPage({ onGetStarted }) {
           >
             How It Works
           </a>
-          <button
-            onClick={onGetStarted}
-            className="cta-btn"
-            style={{
-              background: mk.green,
-              color: mk.bgPanel,
-              border: "none",
-              borderRadius: "8px",
-              padding: "8px 17px",
-              fontSize: "13px",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >
-            Build My CV →
-          </button>
         </div>
+        <button
+          onClick={onGetStarted}
+          className="cta-btn"
+          style={{
+            background: mk.green,
+            color: mk.bgPanel,
+            border: "none",
+            borderRadius: "8px",
+            padding: isMobile ? "8px 14px" : "8px 17px",
+            fontSize: isMobile ? "12px" : "13px",
+            fontWeight: 700,
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {isMobile ? "Build CV →" : "Build My CV →"}
+        </button>
       </nav>
 
       {/* HERO */}
@@ -732,10 +756,10 @@ export default function LandingPage({ onGetStarted }) {
           position: "relative",
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "90px max(32px,5vw) 80px",
+          padding: isMobile ? "52px 20px 56px" : "90px max(32px,5vw) 80px",
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "56px",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+          gap: isMobile ? "36px" : "56px",
           alignItems: "center",
         }}
       >
@@ -868,6 +892,7 @@ export default function LandingPage({ onGetStarted }) {
                 fontWeight: 800,
                 cursor: "pointer",
                 letterSpacing: "-0.2px",
+                width: isMobile ? "100%" : "auto",
               }}
             >
               Start Building — Free Preview ✦
@@ -883,6 +908,7 @@ export default function LandingPage({ onGetStarted }) {
                 fontSize: "14.5px",
                 fontWeight: 500,
                 cursor: "pointer",
+                width: isMobile ? "100%" : "auto",
               }}
             >
               See Templates ↓
@@ -892,7 +918,8 @@ export default function LandingPage({ onGetStarted }) {
           <div
             style={{
               display: "flex",
-              gap: "28px",
+              gap: isMobile ? "0" : "28px",
+              justifyContent: isMobile ? "space-between" : "flex-start",
               marginTop: "38px",
               paddingTop: "28px",
               borderTop: `1px solid ${mk.border}`,
@@ -929,64 +956,66 @@ export default function LandingPage({ onGetStarted }) {
           </div>
         </div>
 
-        {/* Right — animated code window */}
-        <div className="float" style={{ position: "relative", zIndex: 1 }}>
-          <div
-            style={{
-              background: mk.bgPanel,
-              border: `1px solid ${mk.border}`,
-              borderRadius: "14px",
-              overflow: "hidden",
-              boxShadow: "0 40px 100px rgba(0,0,0,.6)",
-            }}
-          >
-            {/* chrome bar */}
+        {/* Right — animated code window, hidden on mobile */}
+        {!isMobile && (
+          <div className="float" style={{ position: "relative", zIndex: 1 }}>
             <div
               style={{
-                background: mk.bgCard,
-                borderBottom: `1px solid ${mk.border}`,
-                padding: "10px 16px",
-                display: "flex",
-                alignItems: "center",
-                gap: "7px",
+                background: mk.bgPanel,
+                border: `1px solid ${mk.border}`,
+                borderRadius: "14px",
+                overflow: "hidden",
+                boxShadow: "0 40px 100px rgba(0,0,0,.6)",
               }}
             >
-              {["#FF5F57", "#FFBD2E", "#28CA41"].map((c) => (
-                <span
-                  key={c}
-                  style={{
-                    width: "11px",
-                    height: "11px",
-                    borderRadius: "50%",
-                    background: c,
-                    display: "block",
-                  }}
-                />
-              ))}
-              <span
+              {/* chrome bar */}
+              <div
                 style={{
-                  flex: 1,
-                  textAlign: "center",
-                  fontSize: "11px",
-                  color: mk.comment,
-                  fontFamily: "'JetBrains Mono', monospace",
+                  background: mk.bgCard,
+                  borderBottom: `1px solid ${mk.border}`,
+                  padding: "10px 16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "7px",
                 }}
               >
-                resume.engine/build
-              </span>
-            </div>
-            <div style={{ padding: "22px 22px 22px" }}>
-              <CodeBlock />
+                {["#FF5F57", "#FFBD2E", "#28CA41"].map((c) => (
+                  <span
+                    key={c}
+                    style={{
+                      width: "11px",
+                      height: "11px",
+                      borderRadius: "50%",
+                      background: c,
+                      display: "block",
+                    }}
+                  />
+                ))}
+                <span
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    fontSize: "11px",
+                    color: mk.comment,
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}
+                >
+                  resume.engine/build
+                </span>
+              </div>
+              <div style={{ padding: "22px 22px 22px" }}>
+                <CodeBlock />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* FEATURES */}
       <section
         id="features"
         style={{
-          padding: "80px max(32px,5vw)",
+          padding: isMobile ? "60px 20px" : "80px max(32px,5vw)",
           maxWidth: "1200px",
           margin: "0 auto",
         }}
@@ -1040,7 +1069,7 @@ export default function LandingPage({ onGetStarted }) {
           background: mk.bgPanel,
           borderTop: `1px solid ${mk.border}`,
           borderBottom: `1px solid ${mk.border}`,
-          padding: "80px max(32px,5vw)",
+          padding: isMobile ? "60px 20px" : "80px max(32px,5vw)",
         }}
       >
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -1101,7 +1130,7 @@ export default function LandingPage({ onGetStarted }) {
       <section
         id="how-it-works"
         style={{
-          padding: "80px max(32px,5vw)",
+          padding: isMobile ? "60px 20px" : "80px max(32px,5vw)",
           maxWidth: "920px",
           margin: "0 auto",
         }}
@@ -1132,43 +1161,129 @@ export default function LandingPage({ onGetStarted }) {
           </h2>
         </div>
 
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-            alignItems: "flex-start",
-            gap: "2px",
-          }}
-        >
-          {/* track */}
+        {isMobile ? (
+          /* ── Mobile: vertical step list ── */
+          <div style={{ position: "relative", paddingLeft: "28px" }}>
+            {/* vertical track */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: "12px",
+                width: "2px",
+                background: mk.border,
+                zIndex: 0,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: "12px",
+                width: "2px",
+                height: `${(activeStep / 6) * 100}%`,
+                background: mk.cyan,
+                zIndex: 1,
+                transition: "height .45s ease",
+                boxShadow: `0 0 8px ${mk.cyan}`,
+              }}
+            />
+            {steps.map((label, i) => {
+              const done = activeStep > i;
+              return (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "16px",
+                    marginBottom: i < steps.length - 1 ? "22px" : 0,
+                    position: "relative",
+                    zIndex: 1,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "26px",
+                      height: "26px",
+                      borderRadius: "50%",
+                      background: done ? mk.cyan : mk.bgCard,
+                      border: `2px solid ${done ? mk.cyan : mk.border}`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "11px",
+                      fontWeight: 800,
+                      color: done ? mk.bgPanel : mk.comment,
+                      transition: "all .35s",
+                      flexShrink: 0,
+                      boxShadow: done ? `0 0 8px ${mk.cyan}66` : "none",
+                      fontFamily: "'JetBrains Mono', monospace",
+                      marginLeft: "-13px",
+                    }}
+                  >
+                    {done ? "✓" : i + 1}
+                  </div>
+                  <span
+                    style={{
+                      color: done ? mk.fg : mk.comment,
+                      fontSize: "14px",
+                      fontWeight: done ? 600 : 400,
+                      lineHeight: "1.3",
+                    }}
+                  >
+                    {label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          /* ── Desktop: horizontal dots ── */
           <div
             style={{
-              position: "absolute",
-              top: "20px",
-              left: "4%",
-              right: "4%",
-              height: "2px",
-              background: mk.border,
-              zIndex: 0,
+              position: "relative",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "2px",
             }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              top: "20px",
-              left: "4%",
-              width: `${(activeStep / 6) * 92}%`,
-              height: "2px",
-              background: mk.cyan,
-              zIndex: 1,
-              transition: "width .45s ease",
-              boxShadow: `0 0 10px ${mk.cyan}`,
-            }}
-          />
-          {steps.map((label, i) => (
-            <StepDot key={i} num={i + 1} label={label} done={activeStep > i} />
-          ))}
-        </div>
+          >
+            {/* track */}
+            <div
+              style={{
+                position: "absolute",
+                top: "20px",
+                left: "4%",
+                right: "4%",
+                height: "2px",
+                background: mk.border,
+                zIndex: 0,
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: "20px",
+                left: "4%",
+                width: `${(activeStep / 6) * 92}%`,
+                height: "2px",
+                background: mk.cyan,
+                zIndex: 1,
+                transition: "width .45s ease",
+                boxShadow: `0 0 10px ${mk.cyan}`,
+              }}
+            />
+            {steps.map((label, i) => (
+              <StepDot
+                key={i}
+                num={i + 1}
+                label={label}
+                done={activeStep > i}
+              />
+            ))}
+          </div>
+        )}
 
         <p
           style={{
@@ -1188,7 +1303,7 @@ export default function LandingPage({ onGetStarted }) {
         style={{
           background: mk.bgPanel,
           borderTop: `1px solid ${mk.border}`,
-          padding: "80px max(32px,5vw)",
+          padding: isMobile ? "60px 20px" : "80px max(32px,5vw)",
         }}
       >
         <div
@@ -1199,7 +1314,7 @@ export default function LandingPage({ onGetStarted }) {
               background: mk.bgCard,
               border: `1px solid ${mk.border}`,
               borderRadius: "20px",
-              padding: "52px 44px",
+              padding: isMobile ? "36px 24px" : "52px 44px",
               position: "relative",
               overflow: "hidden",
             }}
