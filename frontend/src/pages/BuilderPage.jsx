@@ -315,7 +315,7 @@ const BuilderPage = ({ onExit }) => {
           {resumeId ? (
             <div className="w-full h-full flex flex-col relative group">
               <iframe
-                src={`http://localhost:8000/api/resumes/${resumeId}/download/?t=${pdfTimestamp}`}
+                src={`https://backend-curious-stream-8744.fly.dev/api/resumes/${resumeId}/download/?t=${pdfTimestamp}`}
                 className="w-full h-full border-none flex-grow"
                 title="Resume Preview"
               />

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Since you are running Django locally on port 8000
-const API_URL = "http://localhost:8000/api/resumes/";
+const API_URL = "https://backend-curious-stream-8744.fly.dev/api/resumes/";
 
 export const api = axios.create({
   baseURL: API_URL,
