@@ -53,6 +53,7 @@ const BuilderPage = ({ onExit }) => {
 
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [pdfTimestamp, setPdfTimestamp] = useState(Date.now()); // For soft-refreshing the PDF
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // THE AUTO-SAVE ENGINE: Runs automatically every time state changes
   useEffect(() => {
@@ -96,25 +97,23 @@ const BuilderPage = ({ onExit }) => {
 
   // Submit the massive JSON payload to our Django backend
   const handleSaveDraft = async () => {
+    setErrorMessage(null); // Clear any previous errors
+
     try {
-      // 1. Deep copy the data so we don't mutate the live React state
       const sanitizedData = JSON.parse(JSON.stringify(formData));
 
-      // 2. Clean up empty date strings in Education
       sanitizedData.education = sanitizedData.education.map((item) => ({
         ...item,
         start_date: item.start_date === "" ? null : item.start_date,
         end_date: item.end_date === "" ? null : item.end_date,
       }));
 
-      // 3. Clean up empty date strings in Experience
       sanitizedData.experience = sanitizedData.experience.map((item) => ({
         ...item,
         start_date: item.start_date === "" ? null : item.start_date,
         end_date: item.end_date === "" ? null : item.end_date,
       }));
 
-      // 4. THE CLEANUP CREW: Filter out blocks where the user didn't type anything
       sanitizedData.skills = sanitizedData.skills.filter(
         (skill) => skill.name.trim() !== "",
       );
@@ -128,24 +127,38 @@ const BuilderPage = ({ onExit }) => {
         (exp) => exp.company.trim() !== "",
       );
 
-      // 5. Send the clean data to Django
       const data = await resumeService.createResume(sanitizedData);
       setResumeId(data.id);
-
-      // Update the timestamp so the iframe fetches the newest version
       setPdfTimestamp(Date.now());
-
-      // Push them to the final Gateway step!
       setCurrentStep(7);
     } catch (error) {
       console.error("Error saving draft:", error);
 
-      // If it's an Axios error, log the exact Django response to the console
+      // Smart Error Parser
       if (error.response && error.response.data) {
-        console.error("Django Validation Errors:", error.response.data);
-        alert(`Backend Error: Check the browser console for details.`);
+        const data = error.response.data;
+
+        // If Django sends a specific error object, grab the first readable message
+        if (typeof data === "object" && data !== null) {
+          const firstKey = Object.keys(data)[0];
+          const firstError = data[firstKey];
+
+          // Format it to look nice (e.g., "Education: This field is required")
+          const formattedKey =
+            firstKey.charAt(0).toUpperCase() +
+            firstKey.slice(1).replace("_", " ");
+          const formattedError = Array.isArray(firstError)
+            ? firstError[0]
+            : firstError;
+
+          setErrorMessage(`${formattedKey}: ${formattedError}`);
+        } else {
+          setErrorMessage(String(data));
+        }
       } else {
-        alert("Failed to save draft. Is your Django server running?");
+        setErrorMessage(
+          "Failed to connect to the server. Please check your connection.",
+        );
       }
     }
   };
@@ -269,6 +282,22 @@ const BuilderPage = ({ onExit }) => {
           )}
           {currentStep === 7 && <GatewayStep resumeId={resumeId} />}
         </div>
+
+        {/* NEW: Error Banner */}
+        {errorMessage && (
+          <div className="mt-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded flex items-start justify-between shadow-sm animate-in fade-in slide-in-from-bottom-2">
+            <div>
+              <p className="font-bold mb-1">Could not generate preview</p>
+              <p>{errorMessage}</p>
+            </div>
+            <button
+              onClick={() => setErrorMessage(null)}
+              className="text-red-500 hover:text-red-800 transition-colors font-bold px-2"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* Navigation Control Buttons (Hidden on Step 7) */}
         {/* Navigation Control Buttons */}
