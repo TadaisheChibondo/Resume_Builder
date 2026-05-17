@@ -34,7 +34,7 @@ class ResumeSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'is_paid', 'created_at', 'template_choice', 'references_and_awards', 
             'full_name', 'email', 'phone', 'linkedin_url', 'portfolio_url', 
-            'professional_summary', 'education', 'experience', 'projects', 'skills', 'location'
+            'professional_summary', 'education', 'experience', 'projects', 'skills', 'location', 'gender',
         ]
         read_only_fields = ['is_paid', 'paynow_reference', 'paynow_poll_url']
 

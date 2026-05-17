@@ -12,6 +12,12 @@ class Resume(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
+    GENDER_CHOICES = [
+        ('M', 'Male'),
+        ('F', 'Female'),
+        ('O', 'Other'),
+        ('P', 'Prefer not to say'),
+    ]
     
     # --- NEW FIELDS ---
     template_choice = models.CharField(max_length=20, choices=TEMPLATE_CHOICES, default='classic')
@@ -25,6 +31,12 @@ class Resume(models.Model):
     linkedin_url = models.URLField(blank=True, null=True)
     portfolio_url = models.URLField(blank=True, null=True)
     professional_summary = models.TextField(blank=True, null=True)
+    gender = models.CharField(
+        max_length=1, 
+        choices=GENDER_CHOICES, 
+        blank=True, 
+        null=True
+    )
 
     def __str__(self):
         return f"{self.full_name} - {self.id}"

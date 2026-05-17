@@ -130,6 +130,9 @@
     <div class="header">
       <div class="header-name">{{ resume.full_name }}</div>
       <div class="header-contact">
+        {% if resume.gender %}
+        <p>Gender: {{ resume.get_gender_display }}</p>
+        {% endif %}
         <span>{{ resume.email }}</span>
         <span class="contact-pipe">|</span>
         <span>{{ resume.phone }}</span>
@@ -146,10 +149,7 @@
       </div>
     </div>
 
-    {% if resume.skills.all %}
-    <h2>Core Skills</h2>
-    <p class="summary-text">{% for skill in resume.skills.all %}{{ skill.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-    {% endif %} {% if resume.professional_summary %}
+    {% if resume.professional_summary %}
     <h2>Professional Summary</h2>
     <p class="summary-text">{{ resume.professional_summary }}</p>
     {% endif %} {% if resume.education.all %}
@@ -162,7 +162,10 @@
       </div>
       <div class="entry-sub">{{ edu.degree }}</div>
     </div>
-    {% endfor %} {% endif %} {% if resume.experience.all %}
+    {% endfor %} {% endif %} {% if resume.skills.all %}
+    <h2>Core Skills</h2>
+    <p class="summary-text">{% for skill in resume.skills.all %}{{ skill.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    {% endif %} {% if resume.experience.all %}
     <h2>Experience</h2>
     {% for exp in resume.experience.all %}
     <div class="entry">

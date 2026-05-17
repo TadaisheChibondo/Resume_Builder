@@ -23,6 +23,7 @@ const BuilderPage = ({ onExit }) => {
   const defaultFormData = {
     template_choice: "classic",
     references_and_awards: "",
+    gender: "",
     full_name: "",
     email: "",
     phone: "",

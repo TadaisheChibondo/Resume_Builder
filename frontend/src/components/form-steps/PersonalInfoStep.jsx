@@ -86,7 +86,7 @@ const PersonalInfoStep = ({ formData, onChange }) => {
         {/* Location */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1.5">
-            Location (City, Country)
+            Location or Address (Street, City, Country)
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -101,6 +101,22 @@ const PersonalInfoStep = ({ formData, onChange }) => {
               className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-slate-800"
             />
           </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Gender (Optional)
+          </label>
+          <select
+            name="gender"
+            value={formData.gender || ""}
+            onChange={onChange}
+            className="w-full p-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-indigo-500 outline-none"
+          >
+            <option value="">Prefer not to say</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option value="O">Other</option>
+          </select>
         </div>
 
         {/* Online Profiles Grid */}

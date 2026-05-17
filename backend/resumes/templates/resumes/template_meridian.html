@@ -103,6 +103,24 @@
         word-break: break-all;
       }
 
+      .skill-list {
+        list-style: none;
+        margin-top: 10px;
+        padding: 0;
+        display: block;
+      }
+
+      .skill-list li {
+        font-size: 8.8pt;
+        color: #dde3ed;
+        margin-bottom: 8px;
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        display: block;
+        width: 100%;
+      }
+
       /* ── Main Content ───────────────────────────────────── */
       .main {
         width: 66%;
@@ -203,7 +221,9 @@
         <h2>Contact</h2>
         <div class="contact-item">{{ resume.email }}</div>
         <div class="contact-item">{{ resume.phone }}</div>
-        {% if resume.location %}
+        {% if resume.gender %}
+        <p>Gender: {{ resume.get_gender_display }}</p>
+        {% endif %} {% if resume.location %}
         <span class="contact-pipe">|</span>
         <span>{{ resume.location }}</span>
         {% endif %} {% if resume.linkedin_url %}
@@ -212,14 +232,21 @@
         <div class="contact-item">{{ resume.portfolio_url }}</div>
         {% endif %}
       </div>
+      {% if resume.skills.all %}
+      <div class="sidebar-section">
+        <h2>Core Skills</h2>
+        <ul class="skill-list">
+          {% for skill in resume.skills.all %}
+          <li>{{ skill.name }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </div>
 
     <!-- ── Main Content ────────────────────────────────── -->
     <div class="main">
-      {% if resume.skills.all %}
-      <h2>Core Skills</h2>
-      <p class="summary-text">{% for skill in resume.skills.all %} {{ skill.name }}{% if not forloop.last %}, {% endif %} {% endfor %}</p>
-      {% endif %} {% if resume.professional_summary %}
+      {% if resume.professional_summary %}
       <h2>Profile</h2>
       <p class="summary-text">{{ resume.professional_summary }}</p>
       {% endif %} {% if resume.education.all %}
