@@ -233,10 +233,7 @@
         <span>{{ resume.email }}</span>
         <span class="header-divider">·</span>
         <span>{{ resume.phone }}</span>
-        {% if resume.gender %}
-        <span class="contact-pipe">|</span>
-        <p>{{ resume.get_gender_display }}</p>
-        {% endif %} {% if resume.location %}
+        {% if resume.location %}
         <span class="contact-pipe">|</span>
         <span>{{ resume.location }}</span>
         {% endif %} {% if resume.linkedin_url %}

@@ -554,6 +554,317 @@ function StepDot({ num, label, done }) {
   );
 }
 
+// ─── Template Showcase Slideshow ─────────────────────────────
+const showcaseTemplates = [
+  {
+    id: "classic",
+    label: "ATS Classic",
+    accent: mk.cyan,
+    img: "/template1.png",
+  },
+  {
+    id: "meridian",
+    label: "Meridian",
+    accent: mk.purple,
+    img: "/template2.png",
+  },
+  { id: "monolith", label: "Monolith", accent: mk.red, img: "/template3.png" },
+  { id: "vivant", label: "Vivant", accent: mk.orange, img: "/template4.png" },
+];
+
+function TemplateShowcase({ isMobile }) {
+  const [active, setActive] = useState(0);
+  const [animating, setAnimating] = useState(false);
+
+  // Auto-advance every 3.5s
+  useEffect(() => {
+    const t = setInterval(
+      () => goTo((active + 1) % showcaseTemplates.length),
+      3500,
+    );
+    return () => clearInterval(t);
+  }, [active]);
+
+  function goTo(idx) {
+    if (idx === active) return;
+    setAnimating(true);
+    setTimeout(() => {
+      setActive(idx);
+      setAnimating(false);
+    }, 220);
+  }
+
+  const current = showcaseTemplates[active];
+
+  return (
+    <section
+      style={{
+        background: mk.bgPanel,
+        borderTop: `1px solid ${mk.border}`,
+        borderBottom: `1px solid ${mk.border}`,
+        padding: isMobile ? "60px 20px" : "80px max(32px,5vw)",
+      }}
+    >
+      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+        {/* Heading */}
+        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+          <p
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              color: mk.yellow,
+              fontSize: "11.5px",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "3px",
+              marginBottom: "12px",
+            }}
+          >
+            // real examples
+          </p>
+          <h2
+            style={{
+              fontSize: "clamp(26px,3.5vw,40px)",
+              fontWeight: 900,
+              letterSpacing: "-1px",
+              color: mk.fg,
+            }}
+          >
+            See what you'll get.{" "}
+            <span style={{ color: mk.yellow }}>Before you start.</span>
+          </h2>
+          <p
+            style={{ color: mk.comment, marginTop: "10px", fontSize: "14.5px" }}
+          >
+            Click a template to preview it — these are real exports from the
+            builder.
+          </p>
+        </div>
+
+        {isMobile ? (
+          /* ── Mobile: vertical stack ── */
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "28px" }}
+          >
+            {showcaseTemplates.map((tpl) => (
+              <div key={tpl.id}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    marginBottom: "12px",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      background: tpl.accent,
+                      display: "inline-block",
+                      boxShadow: `0 0 8px ${tpl.accent}`,
+                    }}
+                  />
+                  <span
+                    style={{ color: mk.fg, fontWeight: 700, fontSize: "15px" }}
+                  >
+                    {tpl.label}
+                  </span>
+                </div>
+                <div
+                  style={{
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    border: `2px solid ${tpl.accent}44`,
+                    boxShadow: `0 8px 32px rgba(0,0,0,.5)`,
+                  }}
+                >
+                  <img
+                    src={tpl.img}
+                    alt={`${tpl.label} resume template`}
+                    style={{ width: "100%", display: "block" }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* ── Desktop: big viewer + tab strip ── */
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "200px 1fr",
+              gap: "28px",
+              alignItems: "start",
+            }}
+          >
+            {/* Tab strip */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                paddingTop: "8px",
+              }}
+            >
+              {showcaseTemplates.map((tpl, i) => {
+                const sel = i === active;
+                return (
+                  <button
+                    key={tpl.id}
+                    onClick={() => goTo(i)}
+                    style={{
+                      background: sel ? `${tpl.accent}18` : "transparent",
+                      border: `1.5px solid ${sel ? tpl.accent : mk.border}`,
+                      borderRadius: "10px",
+                      padding: "12px 16px",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "all .2s",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: "8px",
+                        height: "8px",
+                        borderRadius: "50%",
+                        background: sel ? tpl.accent : mk.border,
+                        display: "inline-block",
+                        flexShrink: 0,
+                        transition: "background .2s",
+                        boxShadow: sel ? `0 0 8px ${tpl.accent}` : "none",
+                      }}
+                    />
+                    <span
+                      style={{
+                        color: sel ? mk.fg : mk.comment,
+                        fontWeight: sel ? 700 : 400,
+                        fontSize: "13.5px",
+                        transition: "color .2s",
+                      }}
+                    >
+                      {tpl.label}
+                    </span>
+                  </button>
+                );
+              })}
+
+              {/* Progress dots */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: "6px",
+                  paddingLeft: "4px",
+                  marginTop: "6px",
+                }}
+              >
+                {showcaseTemplates.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goTo(i)}
+                    style={{
+                      width: i === active ? "20px" : "6px",
+                      height: "6px",
+                      borderRadius: "3px",
+                      background: i === active ? current.accent : mk.border,
+                      border: "none",
+                      cursor: "pointer",
+                      transition: "all .3s",
+                      padding: 0,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Image viewer */}
+            <div
+              style={{
+                border: `2px solid ${current.accent}55`,
+                borderRadius: "14px",
+                overflow: "hidden",
+                boxShadow: `0 24px 72px rgba(0,0,0,.55), 0 0 0 1px ${current.accent}22`,
+                transition: "border-color .3s, box-shadow .3s",
+                background: mk.bgCard,
+                position: "relative",
+              }}
+            >
+              {/* Browser chrome bar */}
+              <div
+                style={{
+                  background: mk.bgCard,
+                  borderBottom: `1px solid ${mk.border}`,
+                  padding: "9px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                {["#FF5F57", "#FFBD2E", "#28CA41"].map((c) => (
+                  <span
+                    key={c}
+                    style={{
+                      width: "10px",
+                      height: "10px",
+                      borderRadius: "50%",
+                      background: c,
+                      display: "block",
+                    }}
+                  />
+                ))}
+                <span
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    fontSize: "10.5px",
+                    color: mk.comment,
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}
+                >
+                  resume.engine — {current.label}
+                </span>
+                <span
+                  style={{
+                    fontSize: "10px",
+                    color: current.accent,
+                    fontWeight: 700,
+                    fontFamily: "'JetBrains Mono', monospace",
+                    background: `${current.accent}18`,
+                    padding: "2px 8px",
+                    borderRadius: "4px",
+                  }}
+                >
+                  PDF PREVIEW
+                </span>
+              </div>
+
+              {/* The screenshot */}
+              <div
+                style={{
+                  opacity: animating ? 0 : 1,
+                  transform: animating ? "scale(0.98)" : "scale(1)",
+                  transition: "opacity .22s ease, transform .22s ease",
+                  maxHeight: isMobile ? "none" : "600px",
+                  overflowY: "auto",
+                }}
+              >
+                <img
+                  src={current.img}
+                  alt={`${current.label} resume template example`}
+                  style={{ width: "100%", display: "block" }}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 // ─── Main component ───────────────────────────────────────────
 export default function LandingPage({ onGetStarted }) {
   const isMobile = useIsMobile();
@@ -1010,6 +1321,9 @@ export default function LandingPage({ onGetStarted }) {
           </div>
         )}
       </section>
+
+      {/* TEMPLATE SHOWCASE */}
+      <TemplateShowcase isMobile={isMobile} />
 
       {/* FEATURES */}
       <section
