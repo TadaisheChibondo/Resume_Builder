@@ -209,7 +209,8 @@
         <span class="contact-pipe">|</span>
         <span>{{ resume.phone }}</span>
         {% if resume.gender %}
-        <p>Gender: {{ resume.get_gender_display }}</p>
+        <span class="contact-pipe">|</span>
+        <p>{{ resume.get_gender_display }}</p>
         {% endif %} {% if resume.location %}
         <span class="contact-pipe">|</span>
         <span>{{ resume.location }}</span>

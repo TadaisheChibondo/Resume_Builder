@@ -22,27 +22,14 @@
       }
       .watermark {
         position: fixed;
-        left: 5%;
-        font-size: 75pt;
-        font-weight: 800;
-        letter-spacing: 5px;
-        color: rgba(220, 38, 38, 0.08); /* Faint Red */
+        top: 30%;
+        left: 10%;
+        font-size: 80pt;
+        color: rgba(200, 0, 0, 0.06);
         transform: rotate(-45deg);
         z-index: 999;
         white-space: nowrap;
         pointer-events: none;
-      }
-      .watermark-top {
-        top: 15%;
-      }
-      .watermark-mid {
-        top: 45%;
-        color: rgba(234, 88, 12, 0.07);
-        font-size: 85pt;
-        left: 0%;
-      } /* Faint Orange */
-      .watermark-bot {
-        top: 75%;
       }
       .header {
         text-align: center;
@@ -119,27 +106,42 @@
         color: #777;
         font-style: italic;
       }
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px 16px;
+        margin-top: 4px;
+        padding-left: 0;
+        list-style: none;
+      }
+      .skills-grid li {
+        font-size: 9.5pt;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        line-height: 1.5;
+      }
+      .skills-grid li::before {
+        content: "▪";
+        color: #111;
+        font-size: 8pt;
+        flex-shrink: 0;
+      }
     </style>
   </head>
   <body>
     {% if not resume.is_paid %}
-    <div class="watermark watermark-top">PREVIEW ONLY</div>
-    <div class="watermark watermark-mid">UNPAID DRAFT</div>
-    <div class="watermark watermark-bot">PREVIEW ONLY</div>
+    <div class="watermark">PREVIEW ONLY</div>
     {% endif %}
+
     <div class="header">
       <div class="header-name">{{ resume.full_name }}</div>
       <div class="header-contact">
-        {% if resume.gender %}
-        <p>Gender: {{ resume.get_gender_display }}</p>
-        {% endif %}
         <span>{{ resume.email }}</span>
         <span class="contact-pipe">|</span>
         <span>{{ resume.phone }}</span>
-        {% if resume.location %}
-        <span class="contact-pipe">|</span>
-        <span>{{ resume.location }}</span>
-        {% endif %} {% if resume.linkedin_url %}
+        {% if resume.linkedin_url %}
         <span class="contact-pipe">|</span>
         <span>{{ resume.linkedin_url }}</span>
         {% endif %} {% if resume.portfolio_url %}
@@ -149,7 +151,14 @@
       </div>
     </div>
 
-    {% if resume.professional_summary %}
+    {% if resume.skills.all %}
+    <h2>Core Skills</h2>
+    <ul class="skills-grid">
+      {% for skill in resume.skills.all %}
+      <li>{{ skill.name }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% if resume.professional_summary %}
     <h2>Professional Summary</h2>
     <p class="summary-text">{{ resume.professional_summary }}</p>
     {% endif %} {% if resume.education.all %}
@@ -162,10 +171,7 @@
       </div>
       <div class="entry-sub">{{ edu.degree }}</div>
     </div>
-    {% endfor %} {% endif %} {% if resume.skills.all %}
-    <h2>Core Skills</h2>
-    <p class="summary-text">{% for skill in resume.skills.all %}{{ skill.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
-    {% endif %} {% if resume.experience.all %}
+    {% endfor %} {% endif %} {% if resume.experience.all %}
     <h2>Experience</h2>
     {% for exp in resume.experience.all %}
     <div class="entry">

@@ -221,11 +221,12 @@
         <h2>Contact</h2>
         <div class="contact-item">{{ resume.email }}</div>
         <div class="contact-item">{{ resume.phone }}</div>
-        {% if resume.gender %}
-        <p>Gender: {{ resume.get_gender_display }}</p>
-        {% endif %} {% if resume.location %}
+        {% if resume.location %}
         <span class="contact-pipe">|</span>
         <span>{{ resume.location }}</span>
+        {% endif %} {% if resume.gender %}
+        <span class="contact-pipe">|</span>
+        <p>{{ resume.get_gender_display }}</p>
         {% endif %} {% if resume.linkedin_url %}
         <div class="contact-item">{{ resume.linkedin_url }}</div>
         {% endif %} {% if resume.portfolio_url %}
